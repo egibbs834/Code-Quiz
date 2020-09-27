@@ -1,6 +1,24 @@
-(function(){
-    function buildQuiz(){
-      const output = [];
+// declaring variables
+const previousButton = document.getElementById("previous");
+const nextButton = document.getElementById("next");
+const submitButton = document.getElementById('submit');
+const startButton = document.getElementById('start');
+const timerArea = document.getElementById('timerArea');
+
+// hide buttons until quiz begins
+previousButton.style.display = "none";
+nextButton.style.display = "none";
+submitButton.style.display = "none";
+timerArea.style.display = "none";
+
+// main function for quiz
+function beginQuizzing(){
+  startButton.style.display = "none";
+  timerArea.style.display = "block";
+    
+  function buildQuiz(){
+      
+    const output = [];
   
       myQuestions.forEach(
         (currentQuestion, questionNumber) => {
@@ -28,6 +46,9 @@
       );
   
       quizContainer.innerHTML = output.join('');
+
+
+      
     }
   
     function showResults(){
@@ -137,7 +158,7 @@
         answers: {
             a: "1812",
             b: "1912",
-            c: "CyberPunk2077",
+            c: "2077",
         },
         correctAnswer: "a"
       },
@@ -175,23 +196,42 @@
     previousButton.addEventListener("click", showPreviousSlide);
     nextButton.addEventListener("click", showNextSlide);
 
-  })();
+  };
+
+
+// quiz begins when Start Quiz button is clicked 
+startButton.addEventListener('click', beginQuizzing);
+startButton.addEventListener('click', timer);
+console.log("beginQuizzing: ", beginQuizzing);
+
+
+
+
+
+
+
+
+
 
 //  I wish this was a working countdown clock 
-var a = 0;
-a++;
-var b = 0;
-b++
-var c = 100;
+// var a = 0;
+// a++;
+// var b = 0;
+// b++
+// var c = 100;
 
 function timer() {
+    c = 100
     c = c - 1;
     if (c < 100) {
-        time.innerHTML = c;
+        timerArea.innerHTML = c;
     }
     if (c < 1) {
         window.clearInterval(update);
     }
 }
 
-update = setInterval("timer001", 1000);
+update = setInterval(timer, 1000);
+console.log("timer: ", timer);
+console.log("timer(): ", timer());
+console.log("c: ", c)
