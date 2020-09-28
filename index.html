@@ -3,29 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="./style.css"/>
     <title>Pointless Quiz</title>
-    <link rel="stylesheet" href="style.css">
-    <script defer src="script.js"></script>
 </head>
+
 <body>
-    
-    <h1>Ed's Pointless Quiz</h1>
-    <div class="quiz-container">
-        <div id="quiz"></div>
+    <header>
+        <section id="keepScore" style="display: none">
+            <h2>Score: 
+                <div id="score"></div>
+            </h2>
+        </section>
+    </header>
+    <!-- landing page before game begins -->
+    <container>
+        <div id="landingPage">
+            <h1>Ed's Pointless Quiz</h1>
+            <h2>You have 100 seconds to answer 8 pointless questions. You'll be penalized 10 seconds for each wrong answer. Good luck or whatever!</h2>
+            <button id="startButton">START</button>
+        </div>
+    </container>
+    <!-- container for quiz -->
+    <div id="quizDiv" style="display: none">
+        <h2 id="questionText"></h2>
+            <ul>
+                <div id="questionChoices">
+                    <button id="userChoiceA"></button>
+                </div>
+                <div>
+                    <button id="userChoiceB"></button>
+                </div>
+                <div>
+                    <button id="userChoiceC"></button>
+                </div>               
+            </ul>
     </div>
-    
-    <button id="start" style="background-color: red">Start Quiz</button>
-    <button id="previous">Previous Question</button>
-    <button id="next">Next Question</button>
-    <button id="submit">Submit Quiz</button>
-
-    <h2>Timer: 
-        <div id="timerArea"></div>
-    </h2>
-    <!-- <input type="text" id="highScore" value="Enter Initials">
-    <button id="showScore">Add Initials</button> -->
-
-    <div id="results"></div>
+    <!-- timer -->
+    <div id="timerArea" style="display: none">
+        Time: <div id="timer"></div>
+    </div>
+    <h2 id="userAnswer"></h2>
 </body>
+
+
+<!-- game over screen -->
+<div id= "gameOver" style="display: none">
+    <h2> Gam Over</h2>
+    Your Score was: <var id="endScore"></var>
+    <div id="score"></div>
+    </br>
+    Initials: <input type="text"  value="initials" id="initials">
+    </br>
+    <button onclick="submitInitials()">SUBMIT</button>
+</div>
+
+<!-- display high score -->
+<div id="highScores" style="display: none" >
+    <h2> High Scores </h2>
+    <br>
+    <div id="displayScore"></div>
+        <button onclick="startOver()">Play Again</button>
+    </div>
+
+
+
+<script src="script.js"></script>
+
 </html>

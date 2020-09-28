@@ -1,206 +1,233 @@
-// declaring variables
-const previousButton = document.getElementById("previous");
-const nextButton = document.getElementById("next");
-const submitButton = document.getElementById("submit");
-const startButton = document.getElementById("start");
-const timerArea = document.getElementById("timerArea");
-  // sets amount of seconds of starting timer
-  c = 100;
+// global variables
+var startButton = document.getElementById("startButton");
+var time = 100;
+var timerStart = false;
+var timerArea = document.getElementById("timerArea");
+var landingPage = document.getElementById("landingPage");
+var quizDiv = document.getElementById("quizDiv");
+var questionText = document.getElementById("questionText");
+var userChoiceA = document.getElementById("userChoiceA");
+var userChoiceB = document.getElementById("userChoiceB");
+var userChoiceC = document.getElementById("userChoiceC");
+var correctAnswer = document.getElementById("correctAnswer");
+var highScores = [];
+var output = "";
+var score = 0;
+let i = 0;
 
-// hide buttons until quiz begins
-previousButton.style.display = "none";
-nextButton.style.display = "none";
-submitButton.style.display = "none";
-// timerArea.style.display = "none";
+const myQuestions = [
+  {
+    question: "Question 01: Which Question is this?",
+    answers: ["A: CORRECT ANSWER", "B: Question 0", "C: Question 1"],
+    correctAnswer: 2,
+  },
+  {
+    question: "Question 2: Which was the correct answer to Question 01?",
+    answers: ["A: B", "B: C", "C: D"],
+    correctAnswer: 1,
+  },
+  {
+    question: "Question 3: What is the tallest building in the world?",
+    answers: ["A: Burj Khalifa", "B: Shanghai Tower", "C: A regular house"],
+    correctAnswer: 0,
+  },
+  {
+    question: "How many legs does a spider have?",
+    answers: [
+      "A: Too many to count",
+      "B: Around 8, give or take 1 or 2 legs",
+      "C: Did you know horseshoe crabs are in the Arachnid family? Creepy fish-spiders...",
+    ],
+    correctAnswer: 1,
+  },
+  {
+    question: "Who would win in a fight?",
+    answers: [
+      "A: Bill Gates",
+      "B: Jeff Bezos",
+      "C: Elon Musk in a mech suit he built for $1 billion",
+    ],
+    correctAnswer: 2,
+  },
+  {
+    question: "In what year did the War of 1812 start?",
+    answers: ["A: 1812", "B: 1912", "C: 2077"],
+    correctAnswer: 0,
+  },
+  {
+    question: "How many years did the 100 Years War last?",
+    answers: ["A: 100 years", "B: 116 years", "C: 2.5 months?"],
+    correctAnswer: 1,
+  },
+  {
+    question: "Who will be our next president?",
+    answers: [
+      "A: Donald Trump",
+      "B: Joe Biden",
+      "C: Elon Musk in a mech suit he built for $1 billion",
+    ],
+    correctAnswer: 2,
+  },
+];
 
-// main function for quiz
-function beginQuizzing() {
-  startButton.style.display = "none";
-  // timerArea.style.display = "block";
+// timer function
+var timerInterval = setInterval(timer, 1000);
 
-  function buildQuiz() {
-    const output = [];
-
-    myQuestions.forEach((currentQuestion, questionNumber) => {
-      const answers = [];
-
-      for (letter in currentQuestion.answers) {
-        answers.push(
-          `<label>
-                <input type="radio" name="question${questionNumber}" value="${letter}">
-                ${letter} :
-                ${currentQuestion.answers[letter]}
-              </label>`
-        );
-      }
-
-      output.push(
-        `<div class="slide">
-              <div class="question"> ${currentQuestion.question} </div>
-              <div class="answers"> ${answers.join("")} </div>
-            </div>`
-      );
-    });
-
-    quizContainer.innerHTML = output.join("");
+function timer() {
+  if (timerStart) time--;
+  if (time <= 0) {
+    endQuiz();
+    time = 0;
   }
-
-  function showResults() {
-    const answerContainers = quizContainer.querySelectorAll(".answers");
-
-    let numCorrect = 0;
-
-    myQuestions.forEach((currentQuestion, questionNumber) => {
-      const answerContainer = answerContainers[questionNumber];
-      const selector = `input[name=question${questionNumber}]:checked`;
-      const userAnswer = (answerContainer.querySelector(selector) || {}).value;
-
-      if (userAnswer === currentQuestion.correctAnswer) {
-        numCorrect++;
-
-        answerContainers[questionNumber].style.color = "lightgreen";
-      } else {
-        answerContainers[questionNumber].style.color = "red";        
-      }
-    });
-
-    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
-  }
-
-  function showSlide(n) {
-    slides[currentSlide].classList.remove("active-slide");
-    slides[n].classList.add("active-slide");
-    currentSlide = n;
-    if (currentSlide === 0) {
-      previousButton.style.display = "none";
-    } else {
-      previousButton.style.display = "inline-block";
-    }
-    if (currentSlide === slides.length - 1) {
-      nextButton.style.display = "none";
-      submitButton.style.display = "inline-block";
-    } else {
-      nextButton.style.display = "inline-block";
-      submitButton.style.display = "none";
-    }
-  }
-
-  function showNextSlide() {
-    showSlide(currentSlide + 1);
-  }
-
-  function showPreviousSlide() {
-    showSlide(currentSlide - 1);
-  }
-
-
-  // function for timer
-  function timer() {
-    c = c - 1;
-    if (c < 100) {
-      timerArea.innerHTML = c;
-      console.log("c: ", c);
-    }
-
-    if (c < 1) {
-      window.clearInterval(update);
-    }
-  }
-  update = setInterval(timer, 1000);
-
-  const quizContainer = document.getElementById("quiz");
-  const resultsContainer = document.getElementById("results");
-  const submitButton = document.getElementById("submit");
-  const myQuestions = [
-    {
-      question: "Question 01: Which Question is this?",
-      answers: {
-        a: "CORRECT ANSWER",
-        b: "Question 0",
-        c: "Question 1",
-      },
-      correctAnswer: "c",
-    },
-    {
-      question: "Question 2: Which was the correct answer to Question 01?",
-      answers: {
-        a: "b:",
-        b: "c:",
-        c: "d:",
-      },
-      correctAnswer: "b",
-    },
-    {
-      question: "Question 3: What is the tallest building in the world?",
-      answers: {
-        a: "Burj Khalifa",
-        b: "Shanghai Tower",
-        c: "A regular house",
-      },
-      correctAnswer: "a",
-    },
-    {
-      question: "How many legs does a spider have?",
-      answers: {
-        a: "Too many to count",
-        b: "Aounrd 8, give or take 1 or 2 legs",
-        c:
-          "Did you know horseshoe crabs are in the Arachnida family? Creepy fish-spiders...",
-      },
-      correctAnswer: "b",
-    },
-    {
-      question: "Who would win in a fight?",
-      answers: {
-        a: "Bill Gates",
-        b: "Jeff Bezos",
-        c: "Elon Musk in a mech suit he built for $1 billion",
-      },
-      correctAnswer: "c",
-    },
-    {
-      question: "In what year did the War of 1812 start?",
-      answers: {
-        a: "1812",
-        b: "1912",
-        c: "2077",
-      },
-      correctAnswer: "a",
-    },
-    {
-      question: "How many years did the 100 Years War last?",
-      answers: {
-        a: "100 years",
-        b: "116 years",
-        c: "2.5 months?",
-      },
-      correctAnswer: "b",
-    },
-    {
-      question: "Who will be our next president?",
-      answers: {
-        a: "Donald Trump",
-        b: "Joe Biden",
-        c: "Elon Musk in a mech suit he built for $1 billion",
-      },
-      correctAnswer: "c",
-    },
-  ];
-
-  buildQuiz();
-  timer();
-
-  const previousButton = document.getElementById("previous");
-  const nextButton = document.getElementById("next");
-  const slides = document.querySelectorAll(".slide");
-  let currentSlide = 0;
-
-  showSlide(currentSlide);
-
-  submitButton.addEventListener("click", showResults);
-  previousButton.addEventListener("click", showPreviousSlide);
-  nextButton.addEventListener("click", showNextSlide);
+  document.getElementById("timer").innerHTML = time;
 }
 
-// quiz begins when Start Quiz button is clicked
-startButton.addEventListener("click", beginQuizzing);
+// event listener when Start button is clicked
+startButton.addEventListener("click", function () {
+  quizDiv.style.display = "block";
+  landingPage.style.display = "none";
+  timerArea.style.display = "block";
+  document.getElementById("keepScore").style.display = "block";
+  document.getElementById("score").innerHTML = score;
+  timer();
+  setQuizQuestions();
+  timerStart = true;
+});
+
+// renders question and answers
+function setQuizQuestions() {
+  questionText.textContent = myQuestions[i].question;
+  userChoiceA.textContent = myQuestions[i].answers[0];
+  userChoiceB.textContent = myQuestions[i].answers[1];
+  userChoiceC.textContent = myQuestions[i].answers[2];
+}
+
+// user selects A
+userChoiceA.addEventListener("click", function (event) {
+  event.stopPropagation();
+  correctAnswer = myQuestions[i].correctAnswer;
+  console.log("correctAnswer " + correctAnswer);
+  // check answer
+  if (0 === correctAnswer) {
+    // display message to user for 1  second stating if the answer is correct or incorrect
+    document.getElementById("userAnswer").innerHTML = "Correct!";
+    setTimeout(function () {
+      document.getElementById("userAnswer").innerHTML = "";
+    }, 1000);
+    score++;
+    // show score total
+    document.getElementById("score").innerHTML = score;
+  } else {
+    time -= 10;
+    // time penalty on wrong answer
+    document.getElementById("userAnswer").innerHTML = "Incorrect!";
+    setTimeout(function () {
+      document.getElementById("userAnswer").innerHTML = "";
+    }, 1000);
+  }
+//   end game if no questions left
+  if (i >= myQuestions.length - 1) {
+    endQuiz();
+  } else {
+    i++;
+    setQuizQuestions();
+  }
+});
+
+// user selects B
+userChoiceB.addEventListener("click", function (event) {
+  event.stopPropagation();
+  correctAnswer = myQuestions[i].correctAnswer;
+  console.log(correctAnswer);
+  if (1 === correctAnswer) {
+    document.getElementById("userAnswer").innerHTML = "Correct!";
+    setTimeout(function () {
+      document.getElementById("userAnswer").innerHTML = "";
+    }, 1000);
+    score++;
+    document.getElementById("score").innerHTML = score;
+  } else {
+    time -= 10;
+    document.getElementById("userAnswer").innerHTML = "Incorrect!";
+    setTimeout(function () {
+      document.getElementById("userAnswer").innerHTML = "";
+    }, 1000);
+  }
+  if (i >= myQuestions.length - 1) {
+    endQuiz();
+  } else {
+    i++;
+    setQuizQuestions();
+  }
+});
+
+// user selects C
+userChoiceC.addEventListener("click", function (event) {
+  event.stopPropagation();
+  correctAnswer = myQuestions[i].correctAnswer;
+  console.log(correctAnswer);
+  if (2 === correctAnswer) {
+    document.getElementById("userAnswer").innerHTML = "Correct!";
+    setTimeout(function () {
+      document.getElementById("userAnswer").innerHTML = "";
+    }, 1000);
+    score++;
+    document.getElementById("score").innerHTML = score;
+  } else {
+    time -= 10;
+    document.getElementById("userAnswer").innerHTML = "Incorrect!";
+    setTimeout(function () {
+      document.getElementById("userAnswer").innerHTML = "";
+    }, 1000);
+  }
+  if (i >= myQuestions.length - 1) {
+    endQuiz();
+  } else {
+    i++;
+    setQuizQuestions();
+  }
+});
+
+//end quiz
+function endQuiz() {
+  document.getElementById("gameOver").style.display = "block";
+  document.getElementById("quizDiv").style.display = "none";
+  document.getElementById("timerArea").style.display = "none";
+  document.getElementById("keepScore").style.display = "none";
+  document.getElementById("userAnswer").innerHTML = "";
+  document.getElementById("endScore").innerHTML = score;
+  console.log("score: ", score);
+}
+
+//submit score and initals
+function submitInitials() {
+  highScores.push(document.getElementById("initials").value + ": " + score);
+  showHighScores();
+}
+
+function showHighScores() {
+  document.getElementById("quizDiv").style.display = "none";
+  document.getElementById("gameOver").style.display = "none";
+  document.getElementById("highScores").style.display = "block";
+
+  output = "";
+  for (let k = 0; k < highScores.length; k++) {
+    output = output + "  " + highScores[k];
+  }
+  document.getElementById("displayScore").innerHTML = output;  
+}
+
+// refresh the site to the home container page
+function startOver() {
+  document.getElementById("highScores").style.display = "none";
+  document.getElementById("landingPage").style.display = "block";
+  refresh();
+}
+
+// refresh settings for new game
+function refresh() {
+  time = 100;
+  timerStart = false;
+  i = 0;
+  score = 0;
+}
